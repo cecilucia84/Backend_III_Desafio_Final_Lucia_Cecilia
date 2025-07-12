@@ -74,3 +74,54 @@ describe('Adoption Router Functional Tests', () => {
       });
   });
 });
+
+
+describe('Adoption Router Functional Tests - Casos de Error', () => {
+
+  it('should return 400 if required fields are missing on POST /api/adoptions', (done) => {
+    request(app)
+      .post('/api/adoptions')
+      .send({}) // Sin datos
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+
+  it('should return 404 for non-existing adoption on GET /api/adoptions/:id', (done) => {
+    request(app)
+      .get('/api/adoptions/64ee5dc5044bfe10be4d9999') // ID que no existe
+      .end((err, res) => {
+        expect([404, 400]).to.include(res.statusCode);
+        done();
+      });
+  });
+
+  it('should return 404 for non-existing adoption on DELETE /api/adoptions/:id', (done) => {
+    request(app)
+      .delete('/api/adoptions/64ee5dc5044bfe10be4d8888') // ID que no existe
+      .end((err, res) => {
+        expect([404, 400]).to.include(res.statusCode);
+        done();
+      });
+  });
+
+  it('should return 400 for invalid adoption ID format on GET', (done) => {
+    request(app)
+      .get('/api/adoptions/invalid-id-format')
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
+
+  it('should return 400 for invalid adoption ID format on DELETE', (done) => {
+    request(app)
+      .delete('/api/adoptions/invalid-id-format')
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        done();
+      });
+  });
+});

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import logger from '../utils/logger.js';
 import Adoption from "../models/Adoption.js";
 import Pet from "../models/Pet.js";
@@ -12,8 +13,8 @@ export const getAdoptions = async (req, res) => {
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", adoptions });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -21,18 +22,23 @@ export const getAdoptions = async (req, res) => {
 export const getAdoptionById = async (req, res) => {
   try {
     const { id } = req.params;
+    // Validación de formato de ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      logger.warn('❌ Formato de ID inválido');
+      return res.status(400).json({ status: "error", error: "Invalid adoption ID format" });
+    }
     const adoption = await Adoption.findById(id)
       .populate("user")
       .populate("pet");
     if (!adoption) {
-      return logger.warn('⚠️ Recurso no encontrado');
-    res.status(404).json({ status: "error", message: "Adoption not found" });
+      logger.warn('⚠️ Recurso no encontrado');
+      return res.status(404).json({ status: "error", error: "Adoption not found" });
     }
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", adoption });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -40,14 +46,16 @@ export const getAdoptionById = async (req, res) => {
 export const createAdoption = async (req, res) => {
   try {
     const { user, pet } = req.body;
-
+    // Validar campos requeridos
+    if (!user || !pet) {
+      return res.status(400).json({ status: "error", error: "User and Pet are required" });
+    }
     // Validación simple de existencia de usuario y mascota
     const foundUser = await User.findById(user);
     const foundPet = await Pet.findById(pet);
     if (!foundUser || !foundPet) {
-      return res.status(400).json({ status: "error", message: "User or Pet not found" });
+      return res.status(400).json({ status: "error", error: "User or Pet not found" });
     }
-
     const adoption = new Adoption({ user, pet });
     await adoption.save();
 
@@ -59,8 +67,8 @@ export const createAdoption = async (req, res) => {
     logger.info('✅ Recurso creado correctamente');
     res.status(201).json({ status: "success", adoption: populatedAdoption });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -68,15 +76,20 @@ export const createAdoption = async (req, res) => {
 export const deleteAdoption = async (req, res) => {
   try {
     const { id } = req.params;
+    // Validación de formato de ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      logger.warn('❌ Formato de ID inválido');
+      return res.status(400).json({ status: "error", error: "Invalid adoption ID format" });
+    }
     const deleted = await Adoption.findByIdAndDelete(id);
     if (!deleted) {
-      return logger.warn('⚠️ Recurso no encontrado');
-    res.status(404).json({ status: "error", message: "Adoption not found" });
+      logger.warn('⚠️ Recurso no encontrado');
+      return res.status(404).json({ status: "error", error: "Adoption not found" });
     }
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", message: `Adoption ${id} deleted` });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };

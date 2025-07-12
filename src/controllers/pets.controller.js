@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import logger from '../utils/logger.js';
 import Pet from "../models/Pet.js";
 
@@ -8,8 +9,8 @@ export const getPets = async (req, res) => {
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", pets });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -17,16 +18,20 @@ export const getPets = async (req, res) => {
 export const getPetById = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      logger.warn('❌ Formato de ID inválido');
+      return res.status(400).json({ status: "error", error: "Invalid pet ID format" });
+    }
     const pet = await Pet.findById(id);
     if (!pet) {
-      return logger.warn('⚠️ Recurso no encontrado');
-    res.status(404).json({ status: "error", message: "Pet not found" });
+      logger.warn('⚠️ Recurso no encontrado');
+      return res.status(404).json({ status: "error", error: "Pet not found" });
     }
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", pet });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -35,15 +40,15 @@ export const createPet = async (req, res) => {
   try {
     const { name, type, age } = req.body;
     if (!name || !type || typeof age !== 'number') {
-      return res.status(400).json({ status: "error", message: "Missing required fields" });
+      return res.status(400).json({ status: "error", error: "Missing required fields" });
     }
     const pet = new Pet({ name, type, age });
     await pet.save();
     logger.info('✅ Recurso creado correctamente');
     res.status(201).json({ status: "success", pet });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -51,16 +56,20 @@ export const createPet = async (req, res) => {
 export const updatePet = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      logger.warn('❌ Formato de ID inválido');
+      return res.status(400).json({ status: "error", error: "Invalid pet ID format" });
+    }
     const updatedPet = await Pet.findByIdAndUpdate(id, req.body, { new: true });
     if (!updatedPet) {
-      return logger.warn('⚠️ Recurso no encontrado');
-    res.status(404).json({ status: "error", message: "Pet not found" });
+      logger.warn('⚠️ Recurso no encontrado');
+      return res.status(404).json({ status: "error", error: "Pet not found" });
     }
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", pet: updatedPet });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
 
@@ -68,15 +77,19 @@ export const updatePet = async (req, res) => {
 export const deletePet = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      logger.warn('❌ Formato de ID inválido');
+      return res.status(400).json({ status: "error", error: "Invalid pet ID format" });
+    }
     const deleted = await Pet.findByIdAndDelete(id);
     if (!deleted) {
-      return logger.warn('⚠️ Recurso no encontrado');
-    res.status(404).json({ status: "error", message: "Pet not found" });
+      logger.warn('⚠️ Recurso no encontrado');
+      return res.status(404).json({ status: "error", error: "Pet not found" });
     }
     logger.info('📥 Operación exitosa');
     res.status(200).json({ status: "success", message: `Pet ${id} deleted` });
   } catch (err) {
-    logger.error(`❌ Error del servidor: ${error.message}`);
-    res.status(500).json({ status: "error", message: err.message });
+    logger.error(`❌ Error del servidor: ${err.message}`);
+    res.status(500).json({ status: "error", error: err.message });
   }
 };
