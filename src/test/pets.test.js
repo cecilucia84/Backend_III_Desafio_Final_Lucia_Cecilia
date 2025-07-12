@@ -5,8 +5,8 @@ import app from '../app.js';
 
 let petId;
 
-describe('Pets Router Functional Tests', () => {
-  it('should create a new pet', (done) => {
+describe('Pruebas funcionales del router de mascotas', () => {
+  it('debería crear una nueva mascota', (done) => {
     request(app)
       .post('/api/pets')
       .send({ name: 'Firulais', type: 'Perro', age: 3 })
@@ -19,7 +19,7 @@ describe('Pets Router Functional Tests', () => {
       });
   });
 
-  it('should get all pets', (done) => {
+  it('debería obtener todas las mascotas', (done) => {
     request(app)
       .get('/api/pets')
       .end((err, res) => {
@@ -29,7 +29,7 @@ describe('Pets Router Functional Tests', () => {
       });
   });
 
-  it('should get one pet by ID', (done) => {
+  it('debería obtener una mascota por ID', (done) => {
     request(app)
       .get(`/api/pets/${petId}`)
       .end((err, res) => {
@@ -63,7 +63,7 @@ describe('Pets Router Functional Tests', () => {
   });
 });
 
-describe('Pets Router Functional Tests - Casos de Error', () => {
+describe('Pruebas funcionales del router de mascotas - Casos de Error', () => {
   it('should return 400 if required fields are missing on POST /api/pets', (done) => {
     request(app)
       .post('/api/pets')

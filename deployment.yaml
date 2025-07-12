@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adoptme-deployment
+  labels:
+    app: adoptme
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adoptme
+  template:
+    metadata:
+      labels:
+        app: adoptme
+    spec:
+      containers:
+      - name: adoptme-container
+        image: cecilucia84/adoptme:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: MONGODB_URI
+          value: "mongodb+srv://<usuario>:<clave>@<cluster>.mongodb.net/ecommercepets"
+        - name: JWT_SECRET
+          value: "tu_clave_secreta"
+        - name: PORT
+          value: "3000"

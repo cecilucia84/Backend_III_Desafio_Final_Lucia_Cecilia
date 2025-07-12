@@ -1,3 +1,24 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Adoption:
+ *       type: object
+ *       required:
+ *         - user
+ *         - pet
+ *       properties:
+ *         _id:
+ *           type: string
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *         pet:
+ *           $ref: '#/components/schemas/Pet'
+ *         date:
+ *           type: string
+ *           format: date-time
+ */
+
 import mongoose from "mongoose";
 
 const AdoptionSchema = new mongoose.Schema(

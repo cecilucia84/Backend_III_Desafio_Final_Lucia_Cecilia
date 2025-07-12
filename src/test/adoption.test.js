@@ -7,7 +7,7 @@ import app from '../app.js';
 // Variables para guardar los IDs creados durante los tests
 let userId, petId, adoptionId;
 
-describe('Adoption Router Functional Tests', () => {
+describe('Pruebas funcionales del router de adopciones', () => {
 
   before(async () => {
     // Crear usuario
@@ -15,7 +15,7 @@ describe('Adoption Router Functional Tests', () => {
       .post('/api/users')
       .send({ name: 'Ceci Tester', email: `testceci+${Date.now()}@adoptame.com`, password: 'test1234' });
     userId = userRes.body?.user?._id || null;
-    if (userRes.body.status !== 'success') console.log('USER ERROR:', userRes.body);
+    if (userRes.body.status !== 'success') console.log('ERROR AL CREAR USUARIO:', userRes.body);
     expect(userRes.body.status).to.equal('success');
     expect(userRes.body.user).to.exist;
     userId = userRes.body.user._id;
@@ -25,13 +25,13 @@ describe('Adoption Router Functional Tests', () => {
       .post('/api/pets')
       .send({ name: 'Michi', type: 'gato', age: 2 });
     petId = petRes.body?.pet?._id || null;
-    if (petRes.body.status !== 'success') console.log('PET ERROR:', petRes.body);
+    if (petRes.body.status !== 'success') console.log('ERROR AL CREAR MASCOTA:', petRes.body);
     expect(petRes.body.status).to.equal('success');
     expect(petRes.body.pet).to.exist;
     petId = petRes.body.pet._id;
   });
 
-  it('should create a new adoption', (done) => {
+  it('debería crear una nueva adopción', (done) => {
     request(app)
       .post('/api/adoptions')
       .send({ user: userId, pet: petId })
@@ -44,7 +44,7 @@ describe('Adoption Router Functional Tests', () => {
       });
   });
 
-  it('should get all adoptions', (done) => {
+  it('debería obtener todas las adopciones', (done) => {
     request(app)
       .get('/api/adoptions')
       .end((err, res) => {
@@ -54,7 +54,7 @@ describe('Adoption Router Functional Tests', () => {
       });
   });
 
-  it('should get one adoption by ID', (done) => {
+  it('debería obtener una adopción por ID', (done) => {
     request(app)
       .get(`/api/adoptions/${adoptionId}`)
       .end((err, res) => {
@@ -64,7 +64,7 @@ describe('Adoption Router Functional Tests', () => {
       });
   });
 
-  it('should delete the adoption', (done) => {
+  it('debería eliminar la adopción', (done) => {
     request(app)
       .delete(`/api/adoptions/${adoptionId}`)
       .end((err, res) => {
@@ -76,7 +76,7 @@ describe('Adoption Router Functional Tests', () => {
 });
 
 
-describe('Adoption Router Functional Tests - Casos de Error', () => {
+describe('Pruebas funcionales del router de adopciones - Casos de Error', () => {
 
   it('should return 400 if required fields are missing on POST /api/adoptions', (done) => {
     request(app)

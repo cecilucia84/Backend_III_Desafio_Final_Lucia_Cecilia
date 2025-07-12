@@ -5,14 +5,14 @@ import app from '../app.js';
 
 let userId;
 
-describe('Users Router Functional Tests', () => {
-  it('should create a new user', (done) => {
+describe('Pruebas funcionales del router de usuarios', () => {
+  it('debería crear un nuevo usuario', (done) => {
     request(app)
       .post('/api/users')
       .send({ name: 'Test User', email: `testuser+${Date.now()}@adoptame.com`, password: 'test1234' })
       .end((err, res) => {
         expect([201, 409]).to.include(res.statusCode);
-        if (res.body.status !== 'success') console.log('CREATE USER ERROR:', res.body);
+        if (res.body.status !== 'success') console.log('CREATE ERROR AL CREAR USUARIO:', res.body);
         expect(res.body).to.have.property('status', 'success');
         if (res.body.status === 'success') expect(res.body).to.have.property('user');
         if (res.body.status === 'success' && res.body.user) userId = res.body.user._id;
@@ -20,7 +20,7 @@ describe('Users Router Functional Tests', () => {
       });
   });
 
-  it('should get all users', (done) => {
+  it('debería obtener todos los usuarios', (done) => {
     request(app)
       .get('/api/users')
       .end((err, res) => {
@@ -30,7 +30,7 @@ describe('Users Router Functional Tests', () => {
       });
   });
 
-  it('should get one user by ID', (done) => {
+  it('debería obtener un usuario por ID', (done) => {
     request(app)
       .get(`/api/users/${userId}`)
       .end((err, res) => {
@@ -41,7 +41,7 @@ describe('Users Router Functional Tests', () => {
       });
   });
 
-  describe('Users Router Functional Tests - Casos de Error', () => {
+  describe('Pruebas funcionales del router de usuarios - Casos de Error', () => {
   it('should return 400 if required fields are missing on POST /api/users', (done) => {
     request(app)
       .post('/api/users')

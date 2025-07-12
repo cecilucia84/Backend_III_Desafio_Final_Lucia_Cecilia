@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import logger from '../utils/logger.js';
+import logger from '../config/logger.js';
 import Adoption from "../models/Adoption.js";
 import Pet from "../models/Pet.js";
 import User from "../models/User.js";
