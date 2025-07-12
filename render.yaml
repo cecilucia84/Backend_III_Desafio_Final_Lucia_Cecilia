@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: adoptme-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node src/server.js
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        value: clave_super_secreta_adoptme
+      - key: MONGODB_URI
+        value: mongodb+srv://cecilucia84:ceci1234@cluster0.y9c4txp.mongodb.net/ecommercepets?retryWrites=true&w=majority&appName=Cluster0
+      - key: MONGODB_NAME
+        value: ecommercepets
+    autoDeploy: true
+    branch: main
