@@ -87,7 +87,7 @@ La imagen pública está disponible en DockerHub:\
 La documentación interactiva Swagger está disponible en:
 
 ```
-http://localhost:3000/api-docs
+http://localhost:3000/docs/
 ```
 
 Incluye especificación detallada de los endpoints, parámetros, request/response y ejemplos.
