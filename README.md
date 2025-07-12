@@ -69,7 +69,8 @@ docker build -t cecilucia84/adoptme .
 ### Correr el contenedor
 
 ```bash
-docker run -p 3000:3000 -e MONGODB_URI="TU_URI_DE_MONGO" -e PORT=3000 cecilucia84/adoptme
+docker run -p 3000:3000 -e MONGODB_URI="mongodb+srv://cecilucia84:ceci1234@cluster0.y9c4txp.mongodb.net/ecommercepets?retryWrites=true&w=majority&appName=Cluster0" -e PORT=3000 cecilucia84/adoptme
+
 ```
 
 > Reemplazá `TU_URI_DE_MONGO` por tu cadena de conexión real a MongoDB.
