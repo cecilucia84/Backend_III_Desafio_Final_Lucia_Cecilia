@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 /**
  * @swagger
  * components:
@@ -10,6 +12,7 @@
  *       properties:
  *         _id:
  *           type: string
+ *           description: ID de la adopción
  *         user:
  *           $ref: '#/components/schemas/User'
  *         pet:
@@ -17,17 +20,29 @@
  *         date:
  *           type: string
  *           format: date-time
+ *           description: Fecha de adopción
+ *       example:
+ *         _id: "60f7f7f7f7f7f7f7f7f7f7f7"
+ *         user: "60f7f7f7f7f7f7f7f7f7f7f1"
+ *         pet: "60f7f7f7f7f7f7f7f7f7f7f2"
+ *         date: "2024-01-15T12:34:56.789Z"
  */
 
-import mongoose from "mongoose";
-
-const AdoptionSchema = new mongoose.Schema(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    pet: { type: mongoose.Schema.Types.ObjectId, ref: "Pet", required: true },
-    adoptedAt: { type: Date, default: Date.now }
+const AdoptionSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
-  { versionKey: false }
-);
+  pet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Pet",
+    required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  }
+}, { versionKey: false });
 
 export default mongoose.model("Adoption", AdoptionSchema);

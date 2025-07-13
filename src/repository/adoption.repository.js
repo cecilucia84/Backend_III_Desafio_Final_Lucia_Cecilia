@@ -1,19 +1,19 @@
 import AdoptionModel from '../models/adoption.model.js';
 
-export default class AdoptionRepository {
-  async getAllAdoptions() {
+export class AdoptionRepository {
+  async findAll() {
     return await AdoptionModel.find().populate('user pet');
   }
 
-  async getAdoptionById(id) {
+  async findById(id) {
     return await AdoptionModel.findById(id).populate('user pet');
   }
 
-  async createAdoption(data) {
-    return await AdoptionModel.create(data);
+  async create({ user, pet }) {
+    return await AdoptionModel.create({ user, pet });
   }
 
-  async deleteAdoption(id) {
+  async delete(id) {
     return await AdoptionModel.findByIdAndDelete(id);
   }
 }

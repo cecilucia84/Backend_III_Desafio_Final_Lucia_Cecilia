@@ -1,3 +1,6 @@
+import mongoose from "mongoose";
+import validator from "validator";
+
 /**
  * @swagger
  * components:
@@ -5,36 +8,55 @@
  *     User:
  *       type: object
  *       required:
- *         - first_name
  *         - email
  *         - password
+ *         - username
  *       properties:
- *         _id:
+ *         id:
  *           type: string
- *           description: ID autogenerado por MongoDB
- *         first_name:
- *           type: string
- *         last_name:
- *           type: string
+ *           description: ID del usuario
  *         email:
  *           type: string
+ *           description: Email del usuario
  *         password:
  *           type: string
- *         role:
+ *           description: Contraseña encriptada
+ *         username:
  *           type: string
- *           enum: [user, admin]
- *           description: Rol del usuario
+ *           description: Nombre de usuario
+ *       example:
+ *         id: "60f7f7f7f7f7f7f7f7f7f7f7"
+ *         email: "test@correo.com"
+ *         password: "$2a$10$abc123..."
+ *         username: "usuario123"
  */
 
-import mongoose from "mongoose";
-
-const UserSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+const UserSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    minlength: 3
   },
-  { versionKey: false }
-);
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true,
+    validate: {
+      validator: validator.isEmail,
+      message: props => `${props.value} no es un correo válido`
+    }
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6
+  }
+}, { versionKey: false });
 
-export default mongoose.model("User", UserSchema);
+const UserModel = mongoose.model("User", UserSchema);
+
+export default UserModel;

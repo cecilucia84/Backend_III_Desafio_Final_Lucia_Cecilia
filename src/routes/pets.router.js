@@ -1,9 +1,17 @@
+import { Router } from 'express';
+import { PetController } from '../controllers/pets.controller.js';
+
 /**
  * @swagger
  * tags:
  *   name: Pets
  *   description: Gestión de mascotas
- *
+ */
+
+const router = Router();
+
+/**
+ * @swagger
  * /api/pets:
  *   get:
  *     summary: Obtener todas las mascotas
@@ -14,37 +22,14 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 pets:
- *                   type: array
- *                   items:
- *                     type: object
- *   post:
- *     summary: Crear una nueva mascota
- *     tags: [Pets]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - type
- *             properties:
- *               name:
- *                 type: string
- *               type:
- *                 type: string
- *               age:
- *                 type: number
- *     responses:
- *       201:
- *         description: Mascota creada
- *
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Pet'
+ */
+router.get('/', PetController.getAll);
+
+/**
+ * @swagger
  * /api/pets/{id}:
  *   get:
  *     summary: Obtener una mascota por ID
@@ -58,8 +43,72 @@
  *     responses:
  *       200:
  *         description: Mascota encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pet'
  *       404:
  *         description: Mascota no encontrada
+ */
+router.get('/:id', PetController.getById);
+
+/**
+ * @swagger
+ * /api/pets:
+ *   post:
+ *     summary: Crear una nueva mascota
+ *     tags: [Pets]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Pet'
+ *     responses:
+ *       201:
+ *         description: Mascota creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pet'
+ *       400:
+ *         description: Datos inválidos
+ */
+router.post('/', PetController.create);
+
+/**
+ * @swagger
+ * /api/pets/{id}:
+ *   put:
+ *     summary: Actualizar una mascota
+ *     tags: [Pets]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Pet'
+ *     responses:
+ *       200:
+ *         description: Mascota actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pet'
+ *       404:
+ *         description: Mascota no encontrada
+ */
+router.put('/:id', PetController.update);
+
+/**
+ * @swagger
+ * /api/pets/{id}:
  *   delete:
  *     summary: Eliminar una mascota por ID
  *     tags: [Pets]
@@ -75,22 +124,6 @@
  *       404:
  *         description: Mascota no encontrada
  */
-
-import { Router } from 'express';
-import {
-  getPets,
-  getPetById,
-  createPet,
-  updatePet,
-  deletePet
-} from '../controllers/pets.controller.js';
-
-const router = Router();
-
-router.get('/', getPets);
-router.get('/:id', getPetById);
-router.post('/', createPet);
-router.put('/:id', updatePet);
-router.delete('/:id', deletePet);
+router.delete('/:id', PetController.delete);
 
 export default router;

@@ -1,9 +1,17 @@
+import { Router } from 'express';
+import { AdoptionController } from '../controllers/adoption.controller.js';
+
 /**
  * @swagger
  * tags:
  *   name: Adoptions
  *   description: Gestión de adopciones
- *
+ */
+
+const router = Router();
+
+/**
+ * @swagger
  * /api/adoptions:
  *   get:
  *     summary: Obtener todas las adopciones
@@ -14,38 +22,39 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 adoptions:
- *                   type: array
- *                   items:
- *                     type: object
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Adoption'
+ */
+router.get('/', AdoptionController.getAll);
+
+/**
+ * @swagger
+ * /api/adoptions:
  *   post:
- *     summary: Crear una adopción
+ *     summary: Crear una nueva adopción
  *     tags: [Adoptions]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - user
- *               - pet
- *             properties:
- *               user:
- *                 type: string
- *               pet:
- *                 type: string
+ *             $ref: '#/components/schemas/Adoption'
  *     responses:
  *       201:
- *         description: Adopción creada
- *
+ *         description: Adopción creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Adoption'
+ */
+router.post('/', AdoptionController.create);
+
+/**
+ * @swagger
  * /api/adoptions/{id}:
  *   get:
- *     summary: Obtener adopción por ID
+ *     summary: Obtener una adopción por ID
  *     tags: [Adoptions]
  *     parameters:
  *       - in: path
@@ -56,10 +65,20 @@
  *     responses:
  *       200:
  *         description: Adopción encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Adoption'
  *       404:
  *         description: No encontrada
+ */
+router.get('/:id', AdoptionController.getById);
+
+/**
+ * @swagger
+ * /api/adoptions/{id}:
  *   delete:
- *     summary: Eliminar una adopción por ID
+ *     summary: Eliminar una adopción
  *     tags: [Adoptions]
  *     parameters:
  *       - in: path
@@ -73,20 +92,6 @@
  *       404:
  *         description: No encontrada
  */
-
-import { Router } from "express";
-import {
-  getAdoptions,
-  getAdoptionById,
-  createAdoption,
-  deleteAdoption,
-} from "../controllers/adoption.controller.js";
-
-const router = Router();
-
-router.get("/", getAdoptions);
-router.get("/:id", getAdoptionById);
-router.post("/", createAdoption);
-router.delete("/:id", deleteAdoption);
+router.delete('/:id', AdoptionController.delete);
 
 export default router;

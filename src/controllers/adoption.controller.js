@@ -1,95 +1,154 @@
-import mongoose from "mongoose";
+import { AdoptionService } from '../services/adoption.service.js';
+import Pet from '../models/Pet.js';
+import mongoose from 'mongoose';
 import logger from '../config/logger.js';
-import Adoption from "../models/Adoption.js";
-import Pet from "../models/Pet.js";
-import User from "../models/User.js";
 
-// Obtener todas las adopciones (con populate)
-export const getAdoptions = async (req, res) => {
-  try {
-    const adoptions = await Adoption.find()
-      .populate("user")
-      .populate("pet");
-    logger.info('📥 Operación exitosa');
-    res.status(200).json({ status: "success", adoptions });
-  } catch (err) {
-    logger.error(`❌ Error del servidor: ${err.message}`);
-    res.status(500).json({ status: "error", error: err.message });
+const adoptionService = new AdoptionService();
+
+export class AdoptionController {
+  /**
+   * @swagger
+   * /adoptions:
+   *   get:
+   *     summary: Obtener todas las adopciones
+   *     tags: [Adoptions]
+   *     responses:
+   *       200:
+   *         description: Lista de adopciones
+   */
+  static async getAll(req, res) {
+    try {
+      const adoptions = await adoptionService.getAll();
+      logger.info('📥 Adopciones obtenidas correctamente');
+      res.status(200).json({ status: "success", adoptions });
+    } catch (err) {
+      logger.error(`❌ Error al obtener adopciones: ${err.message}`);
+      res.status(500).json({ status: "error", error: "Internal server error" });
+    }
   }
-};
 
-// Obtener una adopción por ID
-export const getAdoptionById = async (req, res) => {
-  try {
+  /**
+   * @swagger
+   * /adoptions/{id}:
+   *   get:
+   *     summary: Obtener una adopción por ID
+   *     tags: [Adoptions]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Adopción encontrada
+   *       404:
+   *         description: No encontrada
+   */
+  static async getById(req, res) {
     const { id } = req.params;
-    // Validación de formato de ObjectId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      logger.warn('❌ Formato de ID inválido');
-      return res.status(400).json({ status: "error", error: "Invalid adoption ID format" });
-    }
-    const adoption = await Adoption.findById(id)
-      .populate("user")
-      .populate("pet");
-    if (!adoption) {
-      logger.warn('⚠️ Recurso no encontrado');
-      return res.status(404).json({ status: "error", error: "Adoption not found" });
-    }
-    logger.info('📥 Operación exitosa');
-    res.status(200).json({ status: "success", adoption });
-  } catch (err) {
-    logger.error(`❌ Error del servidor: ${err.message}`);
-    res.status(500).json({ status: "error", error: err.message });
-  }
-};
 
-// Crear una adopción
-export const createAdoption = async (req, res) => {
-  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      logger.warn(`❌ Formato de ID inválido: ${id}`);
+      return res.status(400).json({ status: "error", error: "Invalid ID format" });
+    }
+
+    try {
+      const adoption = await adoptionService.getById(id);
+      if (!adoption) {
+        logger.warn(`⚠️ Adopción no encontrada: ${id}`);
+        return res.status(404).json({ status: "error", error: "Adoption not found" });
+      }
+      logger.info(`📥 Adopción obtenida: ${id}`);
+      res.status(200).json({ status: "success", adoption });
+    } catch (err) {
+      logger.error(`❌ Error al obtener adopción: ${err.message}`);
+      res.status(500).json({ status: "error", error: "Internal server error" });
+    }
+  }
+
+  /**
+   * @swagger
+   * /adoptions:
+   *   post:
+   *     summary: Crear una nueva adopción
+   *     tags: [Adoptions]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               user:
+   *                 type: string
+   *               pet:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: Adopción creada
+   *       400:
+   *         description: Datos inválidos
+   */
+  static async create(req, res) {
     const { user, pet } = req.body;
-    // Validar campos requeridos
+
     if (!user || !pet) {
+      logger.warn('⚠️ Campos requeridos faltantes al crear adopción');
       return res.status(400).json({ status: "error", error: "User and Pet are required" });
     }
-    // Validación simple de existencia de usuario y mascota
-    const foundUser = await User.findById(user);
-    const foundPet = await Pet.findById(pet);
-    if (!foundUser || !foundPet) {
-      return res.status(400).json({ status: "error", error: "User or Pet not found" });
+
+    try {
+      const newAdoption = await adoptionService.create(user, pet);
+
+      // ✅ Marcar la mascota como adoptada
+      await Pet.findByIdAndUpdate(pet, { adopted: true });
+
+      logger.info(`✅ Adopción creada: ${newAdoption._id}`);
+      res.status(201).json({ status: "success", adoption: newAdoption });
+    } catch (err) {
+      logger.error(`❌ Error al crear adopción: ${err.message}`);
+      res.status(500).json({ status: "error", error: "Internal server error" });
     }
-    const adoption = new Adoption({ user, pet });
-    await adoption.save();
-
-    // Devolver la adopción con populate
-    const populatedAdoption = await Adoption.findById(adoption._id)
-      .populate("user")
-      .populate("pet");
-
-    logger.info('✅ Recurso creado correctamente');
-    res.status(201).json({ status: "success", adoption: populatedAdoption });
-  } catch (err) {
-    logger.error(`❌ Error del servidor: ${err.message}`);
-    res.status(500).json({ status: "error", error: err.message });
   }
-};
 
-// Borrar una adopción por ID
-export const deleteAdoption = async (req, res) => {
-  try {
+  /**
+   * @swagger
+   * /adoptions/{id}:
+   *   delete:
+   *     summary: Eliminar una adopción
+   *     tags: [Adoptions]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Adopción eliminada
+   *       404:
+   *         description: No encontrada
+   */
+  static async delete(req, res) {
     const { id } = req.params;
-    // Validación de formato de ObjectId
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      logger.warn('❌ Formato de ID inválido');
-      return res.status(400).json({ status: "error", error: "Invalid adoption ID format" });
+      logger.warn(`❌ Formato de ID inválido: ${id}`);
+      return res.status(400).json({ status: "error", error: "Invalid ID format" });
     }
-    const deleted = await Adoption.findByIdAndDelete(id);
-    if (!deleted) {
-      logger.warn('⚠️ Recurso no encontrado');
-      return res.status(404).json({ status: "error", error: "Adoption not found" });
+
+    try {
+      const deleted = await adoptionService.delete(id);
+      if (!deleted) {
+        logger.warn(`⚠️ Adopción no encontrada para eliminar: ${id}`);
+        return res.status(404).json({ status: "error", error: "Adoption not found" });
+      }
+      logger.info(`🗑️ Adopción eliminada: ${id}`);
+      res.status(200).json({ status: "success", message: `Adoption ${id} deleted` });
+    } catch (err) {
+      logger.error(`❌ Error al eliminar adopción: ${err.message}`);
+      res.status(500).json({ status: "error", error: "Internal server error" });
     }
-    logger.info('📥 Operación exitosa');
-    res.status(200).json({ status: "success", message: `Adoption ${id} deleted` });
-  } catch (err) {
-    logger.error(`❌ Error del servidor: ${err.message}`);
-    res.status(500).json({ status: "error", error: err.message });
   }
-};
+}

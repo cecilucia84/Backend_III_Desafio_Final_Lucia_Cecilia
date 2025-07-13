@@ -1,27 +1,35 @@
-import UserModel from '../models/user.model.js';
+import UserModel from '../models/User.js';
 
-export default class UserRepository {
-  async getAllUsers() {
+export class UserRepository {
+  async findAll() {
     return await UserModel.find();
   }
 
-  async getUserById(id) {
-    return await UserModel.findById(id);
-  }
-
-  async getUserByEmail(email) {
+  async findByEmail(email) {
     return await UserModel.findOne({ email });
   }
 
-  async createUser(data) {
-    return await UserModel.create(data);
+  async findByUserName(username) {
+    return await UserModel.findOne({ username });
   }
 
-  async updateUser(id, data) {
+  async create({ email, password, username }) {
+    return await UserModel.create({
+      email,
+      password,
+      username
+    });
+  }
+
+  async findById(id) {
+    return await UserModel.findById(id);
+  }
+
+  async update(id, data) {
     return await UserModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  async deleteUser(id) {
+  async delete(id) {
     return await UserModel.findByIdAndDelete(id);
   }
 }

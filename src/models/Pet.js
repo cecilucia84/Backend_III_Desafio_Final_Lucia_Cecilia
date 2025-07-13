@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 /**
  * @swagger
  * components:
@@ -10,26 +12,50 @@
  *       properties:
  *         _id:
  *           type: string
+ *           description: ID autogenerado por MongoDB
  *         name:
  *           type: string
+ *           description: Nombre de la mascota
  *         specie:
  *           type: string
+ *           description: Especie (perro, gato, etc.)
  *         age:
  *           type: number
+ *           description: Edad de la mascota
  *         adopted:
  *           type: boolean
+ *           description: Indica si fue adoptada
+ *       example:
+ *         _id: "60f7f7f7f7f7f7f7f7f7f7f7"
+ *         name: "Luna"
+ *         specie: "perro"
+ *         age: 3
+ *         adopted: false
  */
 
-import mongoose from "mongoose";
-
-const PetSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    type: { type: String, required: true },
-    age: { type: Number, required: true },
-    adopted: { type: Boolean, default: false }
+const PetSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1
   },
-  { versionKey: false }
-);
+  specie: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1
+  },
+  age: {
+    type: Number,
+    min: 0
+  },
+  adopted: {
+    type: Boolean,
+    default: false
+  }
+}, { versionKey: false });
 
-export default mongoose.model("Pet", PetSchema);
+const PetModel = mongoose.model("Pet", PetSchema);
+
+export default PetModel;

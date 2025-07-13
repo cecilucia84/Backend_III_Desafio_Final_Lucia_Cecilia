@@ -1,0 +1,40 @@
+[2025-07-13T02:15:12.959Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:15:14.972Z] [31merror[39m: [31m❌ Error al obtener mascotas: Operation `pets.find()` buffering timed out after 10000ms[39m
+[2025-07-13T02:15:17.028Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:31:00.073Z] [31merror[39m: [31m❌ Error al registrar usuario: Username already in use[39m
+[2025-07-13T02:32:58.713Z] [31merror[39m: [31m❌ Error al crear mascota: Pet validation failed: specie: Path `specie` is required.[39m
+[2025-07-13T02:35:14.163Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:35:16.145Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:35:18.173Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:35:20.195Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:35:22.218Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:48:39.802Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:48:41.765Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:48:43.773Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:48:45.796Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:48:47.793Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:53:00.379Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:53:02.356Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:53:04.383Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:53:06.408Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:53:08.408Z] [31merror[39m: [31m❌ Error al registrar usuario: Operation `users.findOne()` buffering timed out after 10000ms[39m
+[2025-07-13T02:57:25.489Z] [31merror[39m: [31m❌ Error al crear mascota: Pet validation failed: specie: Path `specie` is required.[39m
+[2025-07-13T02:57:25.869Z] [31merror[39m: [31m❌ Error al crear mascota: Pet validation failed: specie: Path `specie` is required.[39m
+[2025-07-13T03:25:57.438Z] [31merror[39m: [31m❌ Error al crear mascota: Pet validation failed: specie: Path `specie` is required.[39m
+[2025-07-13T03:25:57.803Z] [31merror[39m: [31m❌ Error al crear mascota: Pet validation failed: specie: Path `specie` is required.[39m
+[2025-07-13T15:20:51.917Z] [31merror[39m: [31m❌ Error al crear adopción: Cannot find module 'C:\Users\cecil\Desktop\AdoptMe_PROYECTO_FINAL_DEFINITIVO\src\models\pet.model.js' imported from C:\Users\cecil\Desktop\AdoptMe_PROYECTO_FINAL_DEFINITIVO\src\controllers\adoption.controller.js[39m
+[2025-07-13T15:40:58.421Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value "873ced35f24de4686815d0e" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:41:54.301Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value ""873ced35f24de4686815d0e"" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:42:44.272Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value ""6870963c397eb26ef21054a8"" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:45:56.646Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value ""6870963c397eb26ef21054a8"," (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:47:46.234Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value "873ced35f24de4686815d12" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:47:48.833Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value "873ced35f24de4686815d12" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:50:21.457Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value "873bff3e18b28ffd2224314" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:50:43.302Z] [31merror[39m: [31m❌ Error al eliminar adopción: Cast to ObjectId failed for value "873bff3e18b28ffd2224314" (type string) at path "_id" for model "Adoption"[39m
+[2025-07-13T15:57:13.535Z] [31merror[39m: [31m❌ Error al crear adopción: User or Pet not found[39m
+[2025-07-13T16:11:18.895Z] [31merror[39m: [31m❌ Error al obtener usuario: Cast to ObjectId failed for value "profile" (type string) at path "_id" for model "User"[39m
+[2025-07-13T17:07:32.956Z] [31merror[39m: [31m❌ Error al obtener usuario: Cast to ObjectId failed for value "profile" (type string) at path "_id" for model "User"[39m
+[2025-07-13T17:07:50.932Z] [31merror[39m: [31m❌ Error al obtener usuario: Cast to ObjectId failed for value "profile" (type string) at path "_id" for model "User"[39m
+[2025-07-13T17:13:01.092Z] [31merror[39m: [31m❌ Error al registrar usuario: Email already in use[39m
+[2025-07-13T17:28:53.195Z] [41mfatal[49m: [41m❌ Error fatal capturado: ¡Esto es un error fatal de prueba![49m
+[2025-07-13T20:57:30.827Z] [31merror[39m: [31m❌ Error al obtener usuario: Cast to ObjectId failed for value ""64a40f2a2b81c48c8c49d4f1"" (type string) at path "_id" for model "User"[39m

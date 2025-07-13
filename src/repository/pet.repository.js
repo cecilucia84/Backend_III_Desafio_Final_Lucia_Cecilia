@@ -1,19 +1,23 @@
 import PetModel from '../models/pet.model.js';
 
-export default class PetRepository {
-  async getAllPets() {
+export class PetRepository {
+  async findAll() {
     return await PetModel.find();
   }
 
-  async getPetById(id) {
+  async findById(id) {
     return await PetModel.findById(id);
   }
 
-  async createPet(data) {
-    return await PetModel.create(data);
+  async create({ name, type, age }) {
+    return await PetModel.create({ name, type, age });
   }
 
-  async deletePet(id) {
+  async update(id, data) {
+    return await PetModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async delete(id) {
     return await PetModel.findByIdAndDelete(id);
   }
 }
